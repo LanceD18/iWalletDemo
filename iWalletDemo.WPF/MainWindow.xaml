@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:iWalletDemo.WPF"
         adonisExtensions:CursorSpotlightExtension.MaxBlurRadius="128" 
         mc:Ignorable="d"
-        Title="iWalletDemo" Height="545" Width="740">
+        Title="iWalletDemo" Height="445" Width="740">
     <Grid>
 
     </Grid>
