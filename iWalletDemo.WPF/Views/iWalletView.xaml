@@ -124,5 +124,15 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
+
+        <!-- Notifications -->
+        <GroupBox Grid.Row="1" Grid.Column="2" Width="270">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Notification Settings" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
+                <CheckBox Content="Allow Notifications" Margin="2"/>
+                <CheckBox Content="Allow Developer Notifications" Margin="2"/>
+                <CheckBox Content="Disable Notification Sound" Margin="2"/>
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </views:MvxWpfView>
