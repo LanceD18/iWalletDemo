@@ -16,11 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\iWalletDemo.Core\iWalletDemo.Core\iWalletDemo.Core.csproj" />
+    <Folder Include="Util\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Util\" />
+    <ProjectReference Include="..\iWalletDemo.Core\iWalletDemo.Core.csproj" />
   </ItemGroup>
 
 </Project>
