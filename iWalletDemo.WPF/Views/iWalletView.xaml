@@ -168,7 +168,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Notification Panel -->
-                    <GroupBox Grid.Row="1" Grid.Column="1" Width="400" Height="300" adonisExtensions:LayerExtension.IncreaseLayer="True" Margin="10">
+                    <GroupBox Grid.Row="1" Grid.Column="1" Width="400" adonisExtensions:LayerExtension.IncreaseLayer="True" Margin="10">
 
                         <StackPanel Orientation="Vertical">
 
@@ -176,7 +176,7 @@
                             <TextBlock Text="Notification Panel" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
 
                             <!-- Notification List -->
-                            <ListBox ItemsSource="{Binding Notifications}" SelectionMode="Single"  Height="265"
+                            <ListBox ItemsSource="{Binding Notifications}" SelectionMode="Single"  Height="300"
                                      adonisExtensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver="True"
                                      adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay">
 
@@ -200,7 +200,7 @@
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Notification Settings" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
                             <CheckBox Content="Disable Notifications" Margin="2" IsChecked="{Binding DisableNotifications}"/>
-                            <CheckBox Margin="2" IsChecked="{Binding DebugRecommendationNotification}" Checked="ToggleButton_OnChecked_ToggleTimer" Unchecked="ToggleButton_OnChecked_ToggleTimer">
+                            <CheckBox Margin="2" Checked="ToggleButton_OnChecked_ToggleTimer" Unchecked="ToggleButton_OnChecked_ToggleTimer">
                                 <TextBlock TextWrapping="Wrap">
                                     <Run Text="DEBUG: " Foreground="Red"/>
                                     <Run Text="Send [New Recommendation] notification every 5 seconds"/>
@@ -214,6 +214,21 @@
             <!-- Feedback -->
             <TabItem Header="Feedback">
 
+                <StackPanel Orientation="Vertical">
+                    <TextBox Text="{Binding FeedbackTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"
+                             adonisExtensions:WatermarkExtension.Watermark="Feedback Title..."/>
+                    <TextBox Text="{Binding FeedbackDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             AcceptsReturn="True" Height="265" Margin="5" TextWrapping="Wrap" VerticalContentAlignment="Top"
+                             adonisExtensions:WatermarkExtension.Watermark="Feedback Description..."
+                             adonisExtensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver="True"
+                             adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Submit" Width="100" Margin="5" mvx:Bi.nd="Command SubmitFeedbackCommand" IsEnabled="{Binding CanSubmitFeedback}"/>
+                        <CheckBox IsChecked="{Binding SubmitToPublic}" Content="Submit to Public Forums" Margin="5"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!--
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4"/>
@@ -231,8 +246,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                </Grid>
-
+                </Grid>-->
             </TabItem>
         </TabControl>
     </Grid>

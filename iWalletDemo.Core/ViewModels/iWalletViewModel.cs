@@ -10,6 +10,7 @@ using iWalletDemo.Core.Util;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using Microsoft.VisualBasic;
+using static System.String;
 
 namespace iWalletDemo.Core.ViewModels
 {
@@ -102,9 +103,41 @@ namespace iWalletDemo.Core.ViewModels
 
         public bool DisableNotifications { get; set; }
 
-        public bool DebugRecommendationNotification { get; set; }
+        public string NotificationTitle => Notifications.Count == 0 ? "Notifications" : "Notifications " + "[" + Notifications.Count + "]";
+        #endregion
 
-        public string NotificationTitle => Notifications.Count == 0 ? "Notifications" :  "Notifications " + "[" + Notifications.Count + "]";
+        #region Feedback
+
+        private string _feedbackTitle;
+        private string _feedbackDescription;
+        private bool _submitToPublic;
+
+        public string FeedbackTitle
+        {
+            get => _feedbackTitle;
+            set
+            {
+                SetProperty(ref _feedbackTitle, value);
+                RaisePropertyChanged(() => CanSubmitFeedback);
+            }
+        }
+
+        public string FeedbackDescription
+        {
+            get => _feedbackDescription;
+            set
+            {
+                SetProperty(ref _feedbackDescription, value);
+                RaisePropertyChanged(() => CanSubmitFeedback);
+            }
+        }
+
+        public bool SubmitToPublic
+        {
+            get => _submitToPublic;
+            set => SetProperty(ref _submitToPublic, value);
+        }
+
         #endregion
 
         #endregion
@@ -118,6 +151,8 @@ namespace iWalletDemo.Core.ViewModels
         public bool CanSearchWalletItem => WalletItems.Count > 0;
 
         public bool CanSortWalletItems => WalletItems.Count > 0;
+
+        public bool CanSubmitFeedback => FeedbackTitle != null && FeedbackDescription != null && FeedbackTitle != Empty && FeedbackDescription != Empty;
         #endregion
 
         // Commands are bound to controls within the .xaml to execute code on use of said controls
@@ -129,6 +164,8 @@ namespace iWalletDemo.Core.ViewModels
         public IMvxCommand ToggleSortByNameCommand { get; set; }
 
         public IMvxCommand ToggleSortByDateCommand { get; set; }
+
+        public IMvxCommand SubmitFeedbackCommand { get; set; }
         #endregion
 
         #region Sort
@@ -148,6 +185,7 @@ namespace iWalletDemo.Core.ViewModels
             RemoveWalletItemCommand = new MvxCommand(RemoveWalletItem);
             ToggleSortByNameCommand = new MvxCommand(ToggleSortByName);
             ToggleSortByDateCommand = new MvxCommand(ToggleSortByDate);
+            SubmitFeedbackCommand = new MvxCommand(SubmitFeedback);
 
             WpfUtil.SignalNotificationRemoval = (notification) => Notifications.Remove(notification);
             WpfUtil.DebugRecommendationNotificationTimer.Interval = TimeSpan.FromSeconds(5);
@@ -216,6 +254,17 @@ namespace iWalletDemo.Core.ViewModels
             SortByDate = !SortByDate;
 
             UpdateVisibleWalletItems();
+        }
+
+        /// <summary>
+        /// Submits feedback to the developers (and a public forum if the option is selected)
+        /// Currently just a demo version, the information doesn't actually go anywhere but performs the actions that would impact the app
+        /// </summary>
+        public void SubmitFeedback()
+        {
+            FeedbackTitle = "";
+            FeedbackDescription = "";
+            SubmitToPublic = false;
         }
         #endregion
 
