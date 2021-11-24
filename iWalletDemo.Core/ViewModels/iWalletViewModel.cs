@@ -140,6 +140,31 @@ namespace iWalletDemo.Core.ViewModels
 
         #endregion
 
+        #region Login
+        private string _username;
+        private string _password;
+
+        public string Username
+        {
+            get => _username;
+            set
+            {
+                SetProperty(ref _username, value);
+                RaisePropertyChanged(() => CanSignIn);
+            }
+        }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                SetProperty(ref _password, value);
+                RaisePropertyChanged(() => CanSignIn);
+            }
+        }
+        #endregion
+
         #endregion
 
         // These Enablers allow us to dynamically enable and disable controls depending on the given conditions
@@ -153,6 +178,10 @@ namespace iWalletDemo.Core.ViewModels
         public bool CanSortWalletItems => WalletItems.Count > 0;
 
         public bool CanSubmitFeedback => FeedbackTitle != null && FeedbackDescription != null && FeedbackTitle != Empty && FeedbackDescription != Empty;
+
+        public bool SignedIn { get; set; } = false;
+
+        public bool CanSignIn => Username != null && Password != null && Username != Empty && Password != Empty && !SignedIn;
         #endregion
 
         // Commands are bound to controls within the .xaml to execute code on use of said controls
@@ -166,6 +195,8 @@ namespace iWalletDemo.Core.ViewModels
         public IMvxCommand ToggleSortByDateCommand { get; set; }
 
         public IMvxCommand SubmitFeedbackCommand { get; set; }
+
+        public IMvxCommand SignInCommand { get; set; }
         #endregion
 
         #region Sort
@@ -186,17 +217,16 @@ namespace iWalletDemo.Core.ViewModels
             ToggleSortByNameCommand = new MvxCommand(ToggleSortByName);
             ToggleSortByDateCommand = new MvxCommand(ToggleSortByDate);
             SubmitFeedbackCommand = new MvxCommand(SubmitFeedback);
+            SignInCommand = new MvxCommand(() =>
+            {
+                SignedIn = true;
+                RaisePropertyChanged(() => SignedIn);
+                RaisePropertyChanged(() => CanSignIn);
+            });
 
             WpfUtil.SignalNotificationRemoval = (notification) => Notifications.Remove(notification);
             WpfUtil.DebugRecommendationNotificationTimer.Interval = TimeSpan.FromSeconds(5);
-            WpfUtil.DebugRecommendationNotificationTimer.Tick += (sender, e) =>
-            {
-                if (!DisableNotifications)
-                {
-                    Notifications.Add(new NotificationModel("We have a new recommendation for you"));
-                    RaisePropertyChanged(() => Notifications);
-                }
-            };
+            WpfUtil.DebugRecommendationNotificationTimer.Tick += (sender, e) => AddNotification("We have a new recommendation for you");
 
             // Updated the count given to the title on change
             Notifications.CollectionChanged += (sender, args) => RaisePropertyChanged(() => NotificationTitle);
@@ -206,7 +236,8 @@ namespace iWalletDemo.Core.ViewModels
         public void AddWalletItem()
         {
             WalletItems.Add(new WalletItemModel(ActiveWalletItemName));
-            Debug.WriteLine(WalletItems.Count);
+
+            AddNotification("New Virtual Wallet Item added [" + ActiveWalletItemName + "]");
 
             RaisePropertyChanged(() => CanSearchWalletItem);
             RaisePropertyChanged(() => CanSortWalletItems);
@@ -262,6 +293,12 @@ namespace iWalletDemo.Core.ViewModels
         /// </summary>
         public void SubmitFeedback()
         {
+            string notificationString = "Feedback [" + FeedbackTitle + "] sent to developers";
+
+            if (SubmitToPublic) notificationString += " and public forums";
+
+            AddNotification(notificationString);
+
             FeedbackTitle = "";
             FeedbackDescription = "";
             SubmitToPublic = false;
@@ -304,6 +341,19 @@ namespace iWalletDemo.Core.ViewModels
                         VisibleWalletItems.Add(walletItem);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Adds a new notification if notifications are enabled
+        /// </summary>
+        /// <param name="message"></param>
+        public void AddNotification(string message)
+        {
+            if (!DisableNotifications)
+            {
+                Notifications.Add(new NotificationModel(message));
+                RaisePropertyChanged(() => Notifications);
             }
         }
     }

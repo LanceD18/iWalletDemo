@@ -21,8 +21,26 @@
 
         <TabControl  Grid.Row="1" Grid.Column="1" >
 
+            <TabItem Header="Login">
+                <GroupBox HorizontalAlignment="Center" VerticalAlignment="Center" Height="185" Width="200">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Login" FontFamily="16" FontWeight="Bold" Margin="5" HorizontalAlignment="Center"/>
+                        <TextBlock Text="(Anything works for this demo)" Foreground="Red" Margin="5" HorizontalAlignment="Center"/>
+                        <GroupBox adonisExtensions:LayerExtension.IncreaseLayer="True">
+                            <StackPanel Orientation="Vertical">
+                                <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         adonisExtensions:WatermarkExtension.Watermark="Username..." Margin="5"/>
+                                <TextBox Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         adonisExtensions:WatermarkExtension.Watermark="Password..." Margin="5"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <Button Content="Sign In" mvx:Bi.nd="Command SignInCommand" IsEnabled="{Binding CanSignIn}" Margin="5"/>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
+
             <!-- Virtual Wallet -->
-            <TabItem Header="Virtual Wallet">
+            <TabItem Header="Virtual Wallet" IsEnabled="{Binding SignedIn}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4"/>
@@ -53,8 +71,6 @@
                         <Button mvx:Bi.nd="Command RemoveWalletItemCommand" IsEnabled="{Binding CanRemoveWalletItem}"
                                 Width="135" Height="25" Content="Remove Wallet Item" Margin="5" HorizontalAlignment="Left"/>
                     </StackPanel>
-
-
 
                     <!-- Wallet List -->
                     <GroupBox Grid.Row="2" Grid.Column="1" Width="400" Height="300" adonisExtensions:LayerExtension.IncreaseLayer="True" Margin="10">
@@ -142,12 +158,11 @@
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
-
                 </Grid>
             </TabItem>
 
             <!-- Notifications -->
-            <TabItem Header="{Binding NotificationTitle}">
+            <TabItem Header="{Binding NotificationTitle}" IsEnabled="{Binding SignedIn}">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -212,13 +227,12 @@
             </TabItem>
 
             <!-- Feedback -->
-            <TabItem Header="Feedback">
-
+            <TabItem Header="Feedback" IsEnabled="{Binding SignedIn}">
                 <StackPanel Orientation="Vertical">
                     <TextBox Text="{Binding FeedbackTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"
                              adonisExtensions:WatermarkExtension.Watermark="Feedback Title..."/>
                     <TextBox Text="{Binding FeedbackDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             AcceptsReturn="True" Height="265" Margin="5" TextWrapping="Wrap" VerticalContentAlignment="Top"
+                             AcceptsReturn="True" Height="275" Margin="5" TextWrapping="Wrap" VerticalContentAlignment="Top"
                              adonisExtensions:WatermarkExtension.Watermark="Feedback Description..."
                              adonisExtensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver="True"
                              adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"/>
@@ -227,26 +241,6 @@
                         <CheckBox IsChecked="{Binding SubmitToPublic}" Content="Submit to Public Forums" Margin="5"/>
                     </StackPanel>
                 </StackPanel>
-
-                <!--
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="4"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                </Grid>-->
             </TabItem>
         </TabControl>
     </Grid>
