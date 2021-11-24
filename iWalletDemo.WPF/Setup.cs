@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using iWalletDemo.Core.External;
+using iWalletDemo.WPF.External;
 using MvvmCross;
 using Microsoft.Extensions.Logging;
 using MvvmCross;
@@ -13,11 +15,11 @@ namespace iWalletDemo.WPF
 {
     public class Setup : MvxWpfSetup<Core.App>
     {
-        //IoCProvider initialization
+        // IoCProvider initialization
         protected override void InitializeFirstChance(IMvxIoCProvider iocProvider)
         {
-            //base.InitializeFirstChance(iocProvider);
-            //? Not needed until we need to send references from .WPF back to .Core
+            base.InitializeFirstChance(iocProvider);
+            Mvx.IoCProvider.RegisterType<IExternalTimer, ExternalTimer>();
         }
 
         protected override ILoggerProvider CreateLogProvider()

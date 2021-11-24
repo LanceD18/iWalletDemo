@@ -7,131 +7,233 @@
                   xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
                   xmlns:mvx="clr-namespace:MvvmCross.Platforms.Wpf.Binding;assembly=MvvmCross.Platforms.Wpf"
                   xmlns:views="clr-namespace:MvvmCross.Platforms.Wpf.Views;assembly=MvvmCross.Platforms.Wpf"
+                  xmlns:models="clr-namespace:iWalletDemo.Core.Models;assembly=iWalletDemo.Core"
                   mc:Ignorable="d" FontSize="12" FontFamily="Segoe UI" d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="8"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="8"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Core Button Controls -->
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <Button mvx:Bi.nd="Command AddWalletItemCommand"  IsEnabled="{Binding CanAddWalletItem}"
-                        Width="135" Height="25" Content="Add Wallet Item" Margin="5"/>
-                <TextBox Width="150" Height="25" Text="{ Binding ActiveWalletItemName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay }"
-                         adonisExtensions:WatermarkExtension.Watermark="Input Item Name..."/>
-            </StackPanel>
+        <TabControl  Grid.Row="1" Grid.Column="1" >
 
-            <Button mvx:Bi.nd="Command RemoveWalletItemCommand" IsEnabled="{Binding CanRemoveWalletItem}"
-                    Width="135" Height="25" Content="Remove Wallet Item" Margin="5" HorizontalAlignment="Left"/>
-        </StackPanel>
+            <!-- Virtual Wallet -->
+            <TabItem Header="Virtual Wallet">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-        <!-- Wallet List -->
-        <GroupBox Grid.Row="2" Grid.Column="1" Width="400" Height="300" adonisExtensions:LayerExtension.IncreaseLayer="True" Margin="10">
+                    <!-- Core Button Controls -->
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Button mvx:Bi.nd="Command AddWalletItemCommand"  IsEnabled="{Binding CanAddWalletItem}"
+                                    Width="135" Height="25" Content="Add Wallet Item" Margin="5"/>
+                            <TextBox Width="150" Height="25" Text="{ Binding ActiveWalletItemName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay }"
+                                     adonisExtensions:WatermarkExtension.Watermark="Input Item Name..."/>
+                        </StackPanel>
 
-            <StackPanel Orientation="Vertical">
+                        <Button mvx:Bi.nd="Command RemoveWalletItemCommand" IsEnabled="{Binding CanRemoveWalletItem}"
+                                Width="135" Height="25" Content="Remove Wallet Item" Margin="5" HorizontalAlignment="Left"/>
+                    </StackPanel>
 
-                <!-- Title -->
-                <TextBlock Text="Virtual Wallet" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
 
-                <!-- List Input / Sort Buttons -->
-                <StackPanel Orientation="Vertical">
-                    <!-- List Input -->
-                    <TextBox Width="350"  Height="25" Text="{ Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay }" Margin="5"
+
+                    <!-- Wallet List -->
+                    <GroupBox Grid.Row="2" Grid.Column="1" Width="400" Height="300" adonisExtensions:LayerExtension.IncreaseLayer="True" Margin="10">
+
+                        <StackPanel Orientation="Vertical">
+
+                            <!-- Title -->
+                            <TextBlock Text="Virtual Wallet" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
+
+                            <!-- List Input / Sort Buttons -->
+                            <StackPanel Orientation="Vertical">
+
+                                <!-- List Input -->
+                                <TextBox Width="350"  Height="25" Text="{ Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay }" Margin="5"
                              IsEnabled="{Binding CanSearchWalletItem}" adonisExtensions:WatermarkExtension.Watermark="Search..."/>
 
-                    <!-- Sort Buttons -->
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBlock Height="25"  Text="Sort By:" VerticalAlignment="Bottom" Margin="0,5,5,0"/>
-                        <Button mvx:Bi.nd="Command ToggleSortByNameCommand"  IsEnabled="{Binding CanSortWalletItems}"
-                                Height="25" Content="Name" HorizontalAlignment="Left" Margin="3 0 0 0"/>
-                        <Button mvx:Bi.nd="Command ToggleSortByDateCommand"  IsEnabled="{Binding CanSortWalletItems}"
-                                Height="25" Content="Date Created" HorizontalAlignment="Left" Margin="3 0 0 0"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <!-- Wallet Item Listbox -->
-                <ListBox MaxHeight="185"
-                         ItemsSource="{Binding VisibleWalletItems}" SelectedItem="{Binding SelectedWalletItem}"
-                         adonisExtensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver="True"
-                         adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
-                         adonisExtensions:ScrollViewerExtension.HorizontalScrollBarPlacement="Overlay">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="Bold"/>
+                                <!-- Sort Buttons -->
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Height="25"  Text="Sort By:" VerticalAlignment="Bottom" Margin="0,5,5,0"/>
+                                    <Button mvx:Bi.nd="Command ToggleSortByNameCommand"  IsEnabled="{Binding CanSortWalletItems}"
+                                            Height="25" Content="Name" HorizontalAlignment="Left" Margin="3 0 0 0"/>
+                                    <Button mvx:Bi.nd="Command ToggleSortByDateCommand"  IsEnabled="{Binding CanSortWalletItems}"
+                                            Height="25" Content="Date Created" HorizontalAlignment="Left" Margin="3 0 0 0"/>
+                                </StackPanel>
                             </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
 
-        </GroupBox>
+                            <!-- Wallet Item Listbox -->
+                            <ListBox MaxHeight="185"
+                                     ItemsSource="{Binding VisibleWalletItems}" SelectedItem="{Binding SelectedWalletItem}"
+                                     adonisExtensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver="True"
+                                     adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
+                                     adonisExtensions:ScrollViewerExtension.HorizontalScrollBarPlacement="Overlay">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="Bold"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
 
-        <!-- Edit Box -->
-        <GroupBox Grid.Row="2" Grid.Column="2" Width="270" Height="300" adonisExtensions:LayerExtension.IncreaseLayer="True" DataContext="{Binding SelectedWalletItem}">
-            <StackPanel Orientation="Vertical">
+                    </GroupBox>
 
-                <!-- Title -->
-                <TextBlock Text="Card Information" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
+                    <!-- Edit Box -->
+                    <GroupBox Grid.Row="2" Grid.Column="2" Width="270" Height="300" adonisExtensions:LayerExtension.IncreaseLayer="True" DataContext="{Binding SelectedWalletItem}">
+                        <StackPanel Orientation="Vertical">
 
-                <!-- Name -->
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Name " Margin="0 4 0 0" Width="90"/>
-                    <TextBox Width="150" Height="25" Text="{ Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            <!-- Title -->
+                            <TextBlock Text="Card Information" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
+
+                            <!-- Name -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Name " Margin="0 4 0 0" Width="90"/>
+                                <TextBox Width="150" Height="25" Text="{ Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              adonisExtensions:WatermarkExtension.Watermark="Set Item Name..."/>
-                </StackPanel>
+                            </StackPanel>
 
-                <!-- Holder -->
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Holder " Margin="0 4 0 0" Width="90"/>
-                    <TextBox Width="150" Height="25" Text="{ Binding HolderName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            <!-- Holder -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Holder " Margin="0 4 0 0" Width="90"/>
+                                <TextBox Width="150" Height="25" Text="{ Binding HolderName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              adonisExtensions:WatermarkExtension.Watermark="Set Holder Name..."/>
-                </StackPanel>
+                            </StackPanel>
 
-                <!-- Expiration Date -->
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Expiration Date " Margin="0 4 0 0" Width="90"/>
-                    <TextBox Width="150" Height="25" Text="{ Binding ExpirationDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            <!-- Expiration Date -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Expiration Date " Margin="0 4 0 0" Width="90"/>
+                                <TextBox Width="150" Height="25" Text="{ Binding ExpirationDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              adonisExtensions:WatermarkExtension.Watermark="Set Expiration Date..."/>
-                </StackPanel>
+                            </StackPanel>
 
-                <!-- Organization -->
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Organization " Margin="0 4 0 0" Width="90"/>
-                    <TextBox Width="150" Height="25" Text="{ Binding Organization, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            <!-- Organization -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Organization " Margin="0 4 0 0" Width="90"/>
+                                <TextBox Width="150" Height="25" Text="{ Binding Organization, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              adonisExtensions:WatermarkExtension.Watermark="Set Organization Title..."/>
-                </StackPanel>
+                            </StackPanel>
 
-                <!-- ID -->
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="ID " Margin="0 4 0 0" Width="90"/>
-                    <TextBox Width="150" Height="25" Text="{ Binding ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            <!-- ID -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="ID " Margin="0 4 0 0" Width="90"/>
+                                <TextBox Width="150" Height="25" Text="{ Binding ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              adonisExtensions:WatermarkExtension.Watermark="Set ID..."/>
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
 
-        <!-- Notifications -->
-        <GroupBox Grid.Row="1" Grid.Column="2" Width="270">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Notification Settings" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
-                <CheckBox Content="Disable Notifications" Margin="2"/>
-                <CheckBox Content="Disable Notification Sound" Margin="2"/>
-            </StackPanel>
-        </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Notifications -->
+            <TabItem Header="{Binding NotificationTitle}">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Notification Panel -->
+                    <GroupBox Grid.Row="1" Grid.Column="1" Width="400" Height="300" adonisExtensions:LayerExtension.IncreaseLayer="True" Margin="10">
+
+                        <StackPanel Orientation="Vertical">
+
+                            <!-- Title -->
+                            <TextBlock Text="Notification Panel" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
+
+                            <!-- Notification List -->
+                            <ListBox ItemsSource="{Binding Notifications}" SelectionMode="Single"  Height="265"
+                                     adonisExtensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver="True"
+                                     adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay">
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="models:NotificationModel">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button mvx:Bi.nd="Command RemoveNotificationCommand" Height="25"
+                                                    adonisExtensions:CursorSpotlightExtension.BorderBrush="Red">
+                                                <TextBlock Text="X" Foreground="Red" FontWeight="Bold"/>
+                                            </Button>
+                                            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="5" Width="325"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Notification Settings -->
+                    <GroupBox Grid.Row="1" Grid.Column="2" Width="270">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Notification Settings" FontFamily="16" FontWeight="Bold" Margin="2" HorizontalAlignment="Center"/>
+                            <CheckBox Content="Disable Notifications" Margin="2" IsChecked="{Binding DisableNotifications}"/>
+                            <CheckBox Margin="2" IsChecked="{Binding DebugRecommendationNotification}" Checked="ToggleButton_OnChecked_ToggleTimer" Unchecked="ToggleButton_OnChecked_ToggleTimer">
+                                <TextBlock TextWrapping="Wrap">
+                                    <Run Text="DEBUG: " Foreground="Red"/>
+                                    <Run Text="Send [New Recommendation] notification every 5 seconds"/>
+                                </TextBlock>
+                            </CheckBox>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Feedback -->
+            <TabItem Header="Feedback">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                </Grid>
+
+            </TabItem>
+        </TabControl>
     </Grid>
 </views:MvxWpfView>

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using AdonisUI.Controls;
 using iWalletDemo.Core.Models;
+using iWalletDemo.Core.Util;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using Microsoft.VisualBasic;
@@ -23,6 +25,8 @@ namespace iWalletDemo.Core.ViewModels
     public class iWalletViewModel : MvxViewModel
     {
         #region View Variables
+
+        #region Wallet Items
         // Wallet Items
         // TODO This likely no longer needs to be an Observable Collection now that VisibleWalletItems exists, remove later
         /// The full list of all existing wallet items
@@ -31,10 +35,7 @@ namespace iWalletDemo.Core.ViewModels
         public MvxObservableCollection<WalletItemModel> WalletItems
         {
             get => _walletItems;
-            set
-            {
-                SetProperty(ref _walletItems, value);
-            }
+            set => SetProperty(ref _walletItems, value);
         }
 
         // Visible Wallet Items
@@ -45,10 +46,7 @@ namespace iWalletDemo.Core.ViewModels
         public MvxObservableCollection<WalletItemModel> VisibleWalletItems
         {
             get => _visibleWalletItems;
-            set
-            {
-                SetProperty(ref _visibleWalletItems, value);
-            }
+            set => SetProperty(ref _visibleWalletItems, value);
         }
 
         // Active Wallet Item Name
@@ -64,19 +62,6 @@ namespace iWalletDemo.Core.ViewModels
             }
         }
 
-        // Search Filter
-        private string _searchFilter = "";
-
-        public string SearchFilter
-        {
-            get => _searchFilter;
-            set
-            {
-                SetProperty(ref _searchFilter, value);
-                UpdateVisibleWalletItems();
-            }
-        }
-
         // Holds the object for the wallet item currently selected in the UI
         private WalletItemModel _selectedWalletItem;
 
@@ -89,6 +74,39 @@ namespace iWalletDemo.Core.ViewModels
                 RaisePropertyChanged(() => CanRemoveWalletItem);
             }
         }
+
+        // Search Filter
+        private string _searchFilter = "";
+
+        public string SearchFilter
+        {
+            get => _searchFilter;
+            set
+            {
+                SetProperty(ref _searchFilter, value);
+                UpdateVisibleWalletItems();
+            }
+        }
+        #endregion
+
+        #region Notifications
+
+        private MvxObservableCollection<NotificationModel> _notifications = new MvxObservableCollection<NotificationModel>();
+
+        public MvxObservableCollection<NotificationModel> Notifications
+        {
+            get => _notifications;
+            set => SetProperty(ref _notifications, value);
+
+        }
+
+        public bool DisableNotifications { get; set; }
+
+        public bool DebugRecommendationNotification { get; set; }
+
+        public string NotificationTitle => Notifications.Count == 0 ? "Notifications" :  "Notifications " + "[" + Notifications.Count + "]";
+        #endregion
+
         #endregion
 
         // These Enablers allow us to dynamically enable and disable controls depending on the given conditions
@@ -130,6 +148,20 @@ namespace iWalletDemo.Core.ViewModels
             RemoveWalletItemCommand = new MvxCommand(RemoveWalletItem);
             ToggleSortByNameCommand = new MvxCommand(ToggleSortByName);
             ToggleSortByDateCommand = new MvxCommand(ToggleSortByDate);
+
+            WpfUtil.SignalNotificationRemoval = (notification) => Notifications.Remove(notification);
+            WpfUtil.DebugRecommendationNotificationTimer.Interval = TimeSpan.FromSeconds(5);
+            WpfUtil.DebugRecommendationNotificationTimer.Tick += (sender, e) =>
+            {
+                if (!DisableNotifications)
+                {
+                    Notifications.Add(new NotificationModel("We have a new recommendation for you"));
+                    RaisePropertyChanged(() => Notifications);
+                }
+            };
+
+            // Updated the count given to the title on change
+            Notifications.CollectionChanged += (sender, args) => RaisePropertyChanged(() => NotificationTitle);
         }
 
         #region Command Methods
