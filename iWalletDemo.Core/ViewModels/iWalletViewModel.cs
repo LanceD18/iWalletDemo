@@ -91,7 +91,6 @@ namespace iWalletDemo.Core.ViewModels
         #endregion
 
         #region Notifications
-
         private MvxObservableCollection<NotificationModel> _notifications = new MvxObservableCollection<NotificationModel>();
 
         public MvxObservableCollection<NotificationModel> Notifications
@@ -197,6 +196,31 @@ namespace iWalletDemo.Core.ViewModels
         public IMvxCommand SubmitFeedbackCommand { get; set; }
 
         public IMvxCommand SignInCommand { get; set; }
+
+        public IMvxCommand CustomerSupportCommand { get; set; } = new MvxCommand(() => {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://replit.com/@LanceD18/Team-5-CustomerSupport?v=1",
+                UseShellExecute = true
+            });
+        });
+
+        public IMvxCommand RecommendationEngineCommand { get; set; } = new MvxCommand(() => {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://colab.research.google.com/drive/1jpkkSIZ5F5-judmcN7uPaE7xtB6DOGMK#scrollTo=5ccecfe4",
+                UseShellExecute = true
+            });
+        });
+
+        public IMvxCommand VirtualWalletCommand { get; set; } = new MvxCommand(() =>
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://replit.com/@horuychiv7/Team-5-items-code",
+                UseShellExecute = true
+            });
+        });
         #endregion
 
         #region Sort
